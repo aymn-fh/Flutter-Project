@@ -6,7 +6,8 @@ void main() {
 
 class MyCustomApp extends StatefulWidget {
   @override
-  _MyCustomAppState createState() => _MyCustomAppState();}
+  _MyCustomAppState createState() => _MyCustomAppState();
+}
 
 class _MyCustomAppState extends State<MyCustomApp> {
   ThemeMode currentTheme = ThemeMode.system;
@@ -33,7 +34,7 @@ class _MyCustomAppState extends State<MyCustomApp> {
         textTheme: TextTheme(bodyMedium: TextStyle(color: Colors.white)),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
-          fillColor: Color(0xFF1E1E1E), 
+          fillColor: Color(0xFF1E1E1E),
           border: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.teal),
           ),
@@ -51,8 +52,8 @@ class HomePage extends StatefulWidget {
   final Function(bool) onThemeToggle;
   const HomePage({required this.onThemeToggle});
   @override
-  _HomePageState createState() => _HomePageState();}
-
+  _HomePageState createState() => _HomePageState();
+}
 
 class _HomePageState extends State<HomePage> {
   final usernameController = TextEditingController();
@@ -142,8 +143,21 @@ class _HomePageState extends State<HomePage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => UserDataPage(userData: userData),
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) => UserDataPage(userData: userData),
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          const begin = Offset(1.0, 0.0); // الحركة تبدأ من اليمين
+                          const end = Offset.zero; // وتنتهي في مكانها الطبيعي
+                          const curve = Curves.easeInOut;
+
+                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                          var offsetAnimation = animation.drive(tween);
+
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
                       ),
                     );
                   },
@@ -168,6 +182,7 @@ class _HomePageState extends State<HomePage> {
 class UserDataPage extends StatelessWidget {
   final List<Map<String, String>> userData;
   const UserDataPage({required this.userData});
+
   Future<List<Map<String, String>>> fetchUserData() async {
     await Future.delayed(Duration(seconds: 2));
     return userData;
@@ -182,7 +197,7 @@ class UserDataPage extends StatelessWidget {
         backgroundColor: Colors.teal,
         elevation: 10,
       ),
-      body: FutureBuilder<List<Map<String, String>>>( 
+      body: FutureBuilder<List<Map<String, String>>>(
         future: fetchUserData(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
