@@ -1,50 +1,22 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_application_3/main.dart'; // تأكد أن اسم الحزمة صحيح!
 
-# IntelliJ and Android Studio related
-*.iml
-*.ipr
-*.iws
-.idea/
-.gradle/
-local.properties
+void main() {
+  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    // بناء التطبيق وتشغيل إطار البداية.
+    await tester.pumpWidget(MyApp());
 
-# VS Code related
-.vscode/
+    // التحقق من أن العداد يبدأ من 0.
+    expect(find.text('0'), findsOneWidget);
+    expect(find.text('1'), findsNothing);
 
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
-/build/
+    // النقر على أيقونة '+' وتشغيل إطار جديد.
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pumpAndSettle(); // أفضل من pump لأنه ينتظر حتى تنتهي جميع الحركات.
 
-# iOS specific
-ios/Flutter/Flutter.framework
-ios/Flutter/Flutter.podspec
-ios/Pods/
-ios/.symlinks/
-ios/Flutter/App.framework
-ios/Flutter/Flutter.podspec.json
-
-# Android specific
-/android/app/debug/
-/android/app/profile/
-/android/app/release/
-
-# Symbolication and Obfuscation
-app.*.symbols
-app.*.map.json
+    // التحقق من أن العداد أصبح 1.
+    expect(find.text('0'), findsNothing);
+    expect(find.text('1'), findsOneWidget);
+  });
+}
