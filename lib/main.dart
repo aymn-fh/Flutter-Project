@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyCustomApp());
+  runApp(MyApp());
 }
 
-class MyCustomApp extends StatefulWidget {
+class MyApp extends StatefulWidget {
   @override
   _MyCustomAppState createState() => _MyCustomAppState();
 }
 
-class _MyCustomAppState extends State<MyCustomApp> {
+class _MyCustomAppState extends State<MyApp> {
   ThemeMode currentTheme = ThemeMode.system;
 
   void switchTheme(bool isDark) {
